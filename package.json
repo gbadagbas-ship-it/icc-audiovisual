@@ -1,0 +1,13 @@
+{
+  "name": "icc-audiovisual-app",
+  "version": "1.0.0",
+  "description": "ICC Audiovisual - Backend Node.js/Express",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "cd server && npm install && npm start",
+    "dev": "cd server && npm run dev"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
