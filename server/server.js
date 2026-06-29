@@ -45,7 +45,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
+    console.log(`Serveur démarré sur https://icc-audiovisual-bbcs.vercel.app/`);
 });
 
 
