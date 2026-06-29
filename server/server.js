@@ -57,3 +57,13 @@ const coordinatorRoutes = require('./routes/coordinatorRoutes');
 app.use('/api/validation', validationRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/coordinators', coordinatorRoutes);
+
+
+
+
+// Forcez l'utilisation du port fourni par l'hébergeur
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur le port ${PORT}`);
+});

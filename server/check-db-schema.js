@@ -10,9 +10,13 @@ dotenv.config();
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
+      port: process.env.DB_PORT || 17727, // Utilisez le port fourni par l'hébergeur
       waitForConnections: true,
       connectionLimit: 5,
-      queueLimit: 0
+      queueLimit: 0,
+      ssl:{
+        rejectUnauthorized: false
+      }
     });
 
     const [weekly] = await pool.query('SHOW COLUMNS FROM weekly_programs');
@@ -32,3 +36,7 @@ dotenv.config();
     process.exit(1);
   }
 })();
+
+
+
+
