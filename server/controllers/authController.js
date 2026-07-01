@@ -49,11 +49,23 @@ exports.register = async (req, res) => {
     }
 };
 
+// =============================================
+// ⚠️ VERSION AVEC LOGS - REMPLACEZ COMPLÈTEMENT
+// =============================================
 exports.login = async (req, res) => {
+    console.log("🔵 ===== TENTATIVE DE LOGIN =====");
+    console.log("📥 Email reçu:", req.body.email);
+    console.log("📥 Password reçu:", req.body.password ? "✅ Oui" : "❌ Non");
+    
     try {
         const { email, password } = req.body;
         
-        // Vérifier si l'utilisateur existe
+        if (!email || !password) {
+            console.log("❌ Email ou mot de passe manquant");
+            return res.status(400).json({ message: 'Email et mot de passe requis' });
+        }
+
+        console.log("🔍 Recherche de l'utilisateur dans la DB...");
         const [users] = await db.query(
             `SELECT u.*, p.name as pole_name 
              FROM users u 
@@ -62,20 +74,27 @@ exports.login = async (req, res) => {
             [email]
         );
         
+        console.log("👤 Utilisateurs trouvés:", users.length);
+        
         if (users.length === 0) {
+            console.log("❌ Aucun utilisateur trouvé pour:", email);
             return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
         }
         
         const user = users[0];
+        console.log("✅ Utilisateur trouvé:", user.email);
+        console.log("🔑 Hash en base:", user.password_hash ? user.password_hash.substring(0, 20) + "..." : "NULL");
         
-        // Vérifier le mot de passe
+        console.log("🔐 Vérification du mot de passe...");
         const isValidPassword = await bcrypt.compare(password, user.password_hash);
+        console.log("🔐 Résultat comparaison:", isValidPassword ? "✅ OK" : "❌ ÉCHEC");
         
         if (!isValidPassword) {
+            console.log("❌ Mot de passe incorrect pour:", email);
             return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
         }
         
-        // Générer le token
+        console.log("🎉 Connexion réussie pour:", email);
         const token = jwt.sign(
             { id: user.id, email: user.email, role: user.role },
             process.env.JWT_SECRET,
@@ -95,7 +114,8 @@ exports.login = async (req, res) => {
             token
         });
     } catch (error) {
-        console.error(error);
+        console.error("💥 ERREUR lors de la connexion:", error);
+        console.error("📚 Stack:", error.stack);
         res.status(500).json({ message: 'Erreur lors de la connexion' });
     }
 };
