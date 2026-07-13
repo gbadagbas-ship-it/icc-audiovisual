@@ -116,3 +116,19 @@ app.listen(PORT, () => {
   console.log(`📍 URL: https://icc-audiovisual-1.onrender.com`);
   console.log(`🔗 CORS autorisé pour : ${allowedOrigins.join(", ")}`);
 });
+
+
+
+// ROUTE DE DEBUG - À SUPPRIMER APRÈS
+app.get("/debug/users", async (req, res) => {
+  try {
+    const db = require("./config/database");
+    const [users] = await db.query("SELECT id, email, LEFT(password_hash, 30) as hash_preview, role FROM users");
+    res.json({
+      count: users.length,
+      users: users
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
