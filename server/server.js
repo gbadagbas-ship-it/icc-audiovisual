@@ -3,6 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
 
@@ -66,6 +67,18 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Une erreur est survenue" });
 });
+
+// Servir l'application client en production (si build présent)
+if (process.env.NODE_ENV === "production") {
+  const clientBuildPath = path.join(__dirname, "..", "client", "build");
+  app.use(express.static(clientBuildPath));
+
+  app.get("*", (req, res) => {
+    // Laisser passer les routes API
+    if (req.originalUrl.startsWith("/api")) return res.status(404).send('Not Found');
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);

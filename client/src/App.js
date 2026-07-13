@@ -43,10 +43,13 @@ function AppRoutes() {
                     <Dashboard />
                 </PrivateRoute>
             } />
-            <Route path="/adminjoiebonneur82" element={
+            <Route path="/dashboard/admin" element={
                 <PrivateRoute requiredRole="SUPER_ADMIN">
                     <AdminDashboard />
                 </PrivateRoute>
+            } />
+            <Route path="/admin" element={
+                <Navigate to="/dashboard/admin" replace />
             } />
             <Route path="/reports" element={
                 <PrivateRoute requiredRole="SUPER_ADMIN">
