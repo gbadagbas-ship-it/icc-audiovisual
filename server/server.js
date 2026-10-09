@@ -18,7 +18,8 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "https://icc-audiovisual-bbcs.vercel.app",
-  "https://votre-site.netlify.app"
+  "https://votre-site.netlify.app",
+  "https://av-programme.netlify.app"
 ].filter(Boolean);
 
 // Middleware
