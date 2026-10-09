@@ -6,6 +6,10 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+if (!process.env.JWT_SECRET) {
+  throw new Error("La variable d'environnement JWT_SECRET est obligatoire.");
+}
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 const allowedOrigins = [
@@ -13,7 +17,8 @@ const allowedOrigins = [
   process.env.CORS_ORIGIN,
   "http://localhost:3000",
   "http://localhost:3001",
-  "https://icc-audiovisual-bbcs.vercel.app"
+  "https://icc-audiovisual-bbcs.vercel.app",
+  "https://votre-site.netlify.app"
 ].filter(Boolean);
 
 // Middleware
@@ -73,7 +78,7 @@ app.get("/health", async (req, res) => {
     res.status(500).json({
       status: "ERROR",
       message: "Erreur de connexion à la base",
-      error: error.message
+      error: process.env.NODE_ENV === "development" ? error.message : undefined
     });
   }
 });
@@ -119,16 +124,6 @@ app.listen(PORT, () => {
 
 
 
-// ROUTE DE DEBUG - À SUPPRIMER APRÈS
-app.get("/debug/users", async (req, res) => {
-  try {
-    const db = require("./config/database");
-    const [users] = await db.query("SELECT id, email, LEFT(password_hash, 30) as hash_preview, role FROM users");
-    res.json({
-      count: users.length,
-      users: users
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+
+
+

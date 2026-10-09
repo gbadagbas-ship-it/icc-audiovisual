@@ -1,13 +1,11 @@
 // generate-hash.js
 const bcrypt = require('bcryptjs');
 
-// Changez le mot de passe si vous voulez
-const password = 'deptaudio2026'; 
+const password = process.env.ADMIN_PASSWORD;
 
-const hash = bcrypt.hashSync(password, 10);
+if (!password) {
+	console.error('Définissez ADMIN_PASSWORD avant de générer son hash.');
+	process.exit(1);
+}
 
-console.log('=================================');
-console.log(' Mot de passe:', password);
-console.log(' Hash généré:', hash);
-console.log(' Longueur du hash:', hash.length);
-console.log('=================================');
+console.log(bcrypt.hashSync(password, 10));

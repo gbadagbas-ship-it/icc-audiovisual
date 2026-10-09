@@ -31,8 +31,6 @@ const PrivateRoute = ({ children, requiredRole }) => {
 };
 
 function AppRoutes() {
-    const { user } = useAuth();
-    
     return (
         <Routes>
             {/* Page d'accueil publique */}
